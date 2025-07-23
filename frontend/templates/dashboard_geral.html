@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Painel Analítico</title>
+        <link rel="stylesheet" href="/frontend/static/dashboard_geral.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="filtros">
+                <a class="a-voltar" href="home.html">Voltar</a>
+                <a class="a-geral" href="dashboard_geral.html">Painel Geral</a>
+                <a class="a-receitas" href="dashboard_income.html">Painel Receita</a>
+                <a class="a-dispesas" href="dashboard_expenses.html">Painel Despesas</a>
+            </div>
+
+            <div class="graficos">
+                <div class="grafico-barra">
+                    <!-- aqui futuramente será um gráfico com JS -->
+                    <canvas id="graficoBarras"></canvas>
+                </div>
+                <div class="grafico-pizza">
+                    <canvas id="graficoPizza"></canvas>
+                    <div class="legenda">
+                        <span><span class="quadrado verde"></span>Receitas</span>
+                        <span><span class="quadrado vermelho"></span>Despesas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resumo">
+                <div class="grafico-mini"></div>
+                <div class="dados-texto">
+                    <p>Ganhos:</p>
+                    <p>Gastos:</p>
+                    <p>Média:</p>
+                </div>
+            </div>
+
+            <div class="navegacao-mes">
+                <button>&larr;</button>
+                <span>Junho</span>
+                <button>&rarr;</button>
+            </div>
+
+            <div class="tabela">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Ação</th>
+                            <th>Data</th>
+                            <th>Valor</th>
+                            <th>Descrição</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="receita">Receita</td>
+                            <td>20/03/2025</td>
+                            <td>R$ 657,46</td>
+                            <td>Compras do supermercado</td>
+                            <td>
+                                <button class="editar">Editar</button>
+                                <button class="excluir">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="despesa">Despesas</td>
+                            <td>07/07/2025</td>
+                            <td>R$ 241,46</td>
+                            <td>Compras do supermercado</td>
+                            <td>
+                                <button class="editar">Editar</button>
+                                <button class="excluir">Excluir</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="receita">Receita</td>
+                            <td>16/09/2025</td>
+                            <td>R$ 123,46</td>
+                            <td>Compras do supermercado</td>
+                            <td>
+                                <button class="editar">Editar</button>
+                                <button class="excluir">Excluir</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

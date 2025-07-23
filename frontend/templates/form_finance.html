@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Adicionar Ganho ou Gasto</title>
+        <link rel="stylesheet" href="/frontend/static/form_finance.css" />
+        <script src="https://kit.fontawesome.com/dd069937d0.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="container">
+            <header class="app-header">
+                <h1>Adicione um Gasto ou Ganho</h1>
+            </header>
+            <div class="app-main">
+                <form class="app-form" action="#" method="POST">
+                    <div class="line_one">
+                        <div class="input-box">
+                            <label for="entrance_type">Selecione a Entrada</label>
+                            <select name="entrance_type" id="entrance_type">
+                                <option value="income">Receita</option>
+                                <option value="expenses">Despesa</option>
+                            </select>
+                        </div>
+                        <div class="input-box">
+                            <label for="value">Selecione o valor</label>
+                            <input id="value" name="value" type="text" placeholder="Ex. R$200,00" required />
+                        </div>
+
+                        <div class="input-box">
+                            <div></div>
+                            <label for="category">Selecione uma Categoria</label>
+                            <select name="category" id="category">
+                                <option value="select">Selecione uma Categoria</option>
+                                <option value="new-category">+ Nova Categoria</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="line_two">
+                        <div class="input-box">
+                            <label for="description"> Coloque uma Descricao (opcional)</label>
+                            <input class="description" id="description" name="description" type="text" placeholder="Alguma coisa" required />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="line_three">
+                <button class="enviar">Enviar</button>
+                <button class="cancelar">Cancelar</button>
+            </div>
+        </div>
+    </body>
+</html>
