@@ -13,41 +13,50 @@
                 <h1>Adicione um Gasto ou Ganho</h1>
             </header>
             <div class="app-main">
-                <form class="app-form" action="#" method="POST">
+                <form class="app-form" method="post" action="/form">
                     <div class="line_one">
                         <div class="input-box">
                             <label for="entrance_type">Selecione a Entrada</label>
-                            <select name="entrance_type" id="entrance_type">
-                                <option value="income">Receita</option>
-                                <option value="expenses">Despesa</option>
+                            <select name="type_input" id="entrance_type">
+                                <option value="Ganho">Ganho</option>
+                                <option value="Gasto">Gasto</option>
                             </select>
                         </div>
                         <div class="input-box">
                             <label for="value">Selecione o valor</label>
-                            <input id="value" name="value" type="text" placeholder="Ex. R$200,00" required />
+                            <input id="value" name="value" type="number" step="0.01" placeholder="Ex. 200.00" required />
+                        </div>
+                    </div>
+
+                    <div class="line_three">
+                        <div class="input-box">
+                            <label for="name">Nome</label>
+                            <input id="name" name="name" type="text" placeholder="Ex: Salário, Conta de Luz" required />
                         </div>
 
                         <div class="input-box">
-                            <div></div>
                             <label for="category">Selecione uma Categoria</label>
-                            <select name="category" id="category">
-                                <option value="select">Selecione uma Categoria</option>
-                                <option value="new-category">+ Nova Categoria</option>
+                            <select name="category_id" required>
+                                {% for categoria in categorias %}
+                                <option value="{{ categoria.id }}">{{ categoria.name }}</option>
+                                {% endfor %}
                             </select>
+                            <a href="/category" class="new_category">Criar nova categoria</a>
                         </div>
                     </div>
 
                     <div class="line_two">
                         <div class="input-box">
-                            <label for="description"> Coloque uma Descricao (opcional)</label>
+                            <label for="description">Coloque uma Descrição</label>
                             <input class="description" id="description" name="description" type="text" placeholder="Alguma coisa" required />
                         </div>
                     </div>
+
+                    <div class="line_four">
+                        <button class="enviar" type="submit">Enviar</button>
+                        <button onclick="window.location.href='/'" class="cancelar" type="reset">Cancelar</button>
+                    </div>
                 </form>
-            </div>
-            <div class="line_three">
-                <button class="enviar">Enviar</button>
-                <button class="cancelar">Cancelar</button>
             </div>
         </div>
     </body>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Adicionar Ganho ou Gasto</title>
+        <link rel="stylesheet" href="/frontend/static/new_category.css" />
+        <script src="https://kit.fontawesome.com/dd069937d0.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="container">
+            <header class="app-header">
+                <h1>Adicionar Categoria</h1>
+            </header>
+            <div class="app-main">
+                <form class="app-form" method="post" action="/category">
+                    <div class="line_one">
+                        <div class="input-box">
+                            <label for="name">Nome</label>
+                            <input id="name" name="name" type="text" placeholder="Ex: Contas..." required />
+                        </div>
+                    </div>
+
+                    <div class="line_two">
+                        <button onclick="window.location.href='/form'" class="enviar" type="submit">Criar</button>
+                        <button onclick="window.location.href='/form'" class="cancelar" type="reset">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

@@ -16,12 +16,12 @@ body {
     color: #212529;
 }
 .container {
-    width: 1400px;
-    height: 930px;
-    max-width: 1600px;
-    max-height: 1200px;
-    min-width: 1000px;
-    min-height: 500px;
+    width: 800px;
+    height: 450px;
+    max-width: 1200px;
+    max-height: 800px;
+    min-width: 600px;
+    min-height: 300px;
     margin-top: 30px;
     box-shadow: 15px 15px 0 #212529;
     display: flex;
@@ -31,9 +31,16 @@ body {
 }
 
 header h1 {
-    font-size: 80px;
+    font-size: 50px;
     margin-top: 40px;
     margin-bottom: 70px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .line_one {
@@ -41,8 +48,8 @@ header h1 {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    width: 1250px;
-    height: 150px;
+    width: 650px;
+    height: 100px;
 }
 
 .line_two {
@@ -50,48 +57,14 @@ header h1 {
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
-    width: 950px;
-    height: 250px;
-    margin-left: 170px;
-}
-
-.line_three {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    width: 950px;
-    height: 250px;
-    margin: 0 auto;
-}
-
-.line_three .input-box a {
-    width: 220px;
-    height: 30px;
-    background-color: white;
-    box-shadow: 7px 7px 0 #212529;
+    width: 650px;
+    height: 100px;
     margin-top: 30px;
-    background-color: white;
-    font-size: 15px;
-    padding: 5px;
-    padding-left: 20px;
-    text-decoration: none;
-    color: #212529;
 }
 
-.line_three .input-box a:hover {
-    box-shadow: 7px 7px 0 #5fa8d3;
-}
-
-.line_four {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-}
-
-.line_four button {
-    width: 100px;
-    height: 30px;
+.line_two button {
+    width: 120px;
+    height: 35px;
     margin-bottom: 20px;
     margin-left: 20px;
     box-shadow: 7px 7px 0 #212529;
