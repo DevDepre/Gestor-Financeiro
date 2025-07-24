@@ -16,4 +16,4 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 def criar_tabelas():
-    BAse.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
