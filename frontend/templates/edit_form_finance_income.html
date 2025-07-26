@@ -13,7 +13,7 @@
                 <h1>Adicione um Gasto ou Ganho</h1>
             </header>
             <div class="app-main">
-                <form class="app-form" method="post" action="/form">
+                <form class="app-form" method="post" action="/editar_receita/{{ receita.id }}">
                     <div class="line_one">
                         <div class="input-box">
                             <label for="entrance_type">Selecione a Entrada</label>
@@ -53,8 +53,9 @@
                     </div>
 
                     <div class="line_four">
+                        <input type="hidden" name="type_input" value="{{ receita.type_input }}" />
                         <button class="enviar" type="submit">Enviar</button>
-                        <button onclick="window.location.href='/'" class="cancelar" type="reset">Cancelar</button>
+                        <button onclick="window.location.href='/dashboard_income'" class="cancelar" type="reset">Cancelar</button>
                     </div>
                 </form>
             </div>

@@ -9,10 +9,10 @@
     <body>
         <div class="container receita-ativa">
             <div class="filtros">
-                <a class="a-voltar" href="home.html">Voltar</a>
-                <a class="a-geral" href="dashboard_geral.html">Painel Geral</a>
-                <a class="a-receitas" href="dashboard_income.html">Painel Receita</a>
-                <a class="a-dispesas" href="dashboard_expenses.html">Painel Despesas</a>
+                <a class="a-voltar" href="/">Voltar</a>
+                <a class="a-geral" href="/dashboard_geral">Painel Geral</a>
+                <a class="a-receitas" href="/dashboard_income">Painel Receita</a>
+                <a class="a-dispesas" href="/dashboard_expenses">Painel Despesas</a>
             </div>
 
             <div class="graficos">
@@ -37,7 +37,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Nome</th>
                             <th>Data</th>
                             <th>Valor</th>
                             <th>Descrição</th>
@@ -45,26 +45,21 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for receita in receitas %}
                         <tr>
-                            <td>1</td>
-                            <td>20/03/2025</td>
-                            <td>R$ 657,46</td>
-                            <td>Compras do supermarket</td>
+                            <td>{{ receita.name }}</td>
+                            <td>{{ receita.created_at }}</td>
+                            <td>R$ {{ "%.2f"|format(receita.value) }}</td>
+                            <td>{{ receita.description }}</td>
                             <td>
-                                <button class="editar">Editar</button>
-                                <button class="excluir">Excluir</button>
+                                <form method="post" action="/acao_receita">
+                                    <input type="hidden" name="id" value="{{ receita.id }}" />
+                                    <button type="submit" name="action" value="editar" class="editar">Editar</button>
+                                    <button type="submit" name="action" value="excluir" class="excluir">Excluir</button>
+                                </form>
                             </td>
                         </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>16/09/2025</td>
-                            <td>R$ 123,46</td>
-                            <td>Compras do supermarket</td>
-                            <td>
-                                <button class="editar">Editar</button>
-                                <button class="excluir">Excluir</button>
-                            </td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

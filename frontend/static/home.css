@@ -17,6 +17,10 @@ body {
     font-family: Arial, sans-serif;
 }
 
+h2 {
+    text-align: center;
+}
+
 .container {
     width: 1400px;
     height: 760px;
