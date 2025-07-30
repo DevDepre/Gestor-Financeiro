@@ -40,12 +40,10 @@
 
 .receita {
     background-color: #d4edda;
-    border: 2px solid #28a745;
 }
 
 .despesa {
     background-color: #f8d7da;
-    border: 2px solid #dc3545;
 }
 
 .graficos {
@@ -154,6 +152,7 @@ th {
     margin: 0 5px;
     box-shadow: 4px 4px 0 #212529;
     cursor: pointer;
+    border: 0;
 }
 
 .editar {

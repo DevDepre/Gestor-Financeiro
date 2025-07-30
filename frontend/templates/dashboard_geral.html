@@ -9,7 +9,7 @@
     <body>
         <div class="container">
             <div class="filtros">
-                <a class="a-voltar" href="/home">Voltar</a>
+                <a class="a-voltar" href="/">Voltar</a>
                 <a class="a-geral" href="/dashboard_geral">Painel Geral</a>
                 <a class="a-receitas" href="/dashboard_income">Painel Receita</a>
                 <a class="a-dispesas" href="/dashboard_expenses">Painel Despesas</a>
@@ -17,7 +17,6 @@
 
             <div class="graficos">
                 <div class="grafico-barra">
-                    <!-- aqui futuramente será um gráfico com JS -->
                     <canvas id="graficoBarras"></canvas>
                 </div>
                 <div class="grafico-pizza">
@@ -48,7 +47,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Nome</th>
                             <th>Ação</th>
                             <th>Data</th>
                             <th>Valor</th>
@@ -57,39 +56,26 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for geral in gerais %}
                         <tr>
-                            <td>1</td>
-                            <td class="receita">Receita</td>
-                            <td>20/03/2025</td>
-                            <td>R$ 657,46</td>
-                            <td>Compras do supermercado</td>
+                            <td>{{ geral.name }}</td>
+                            {% if geral.type_input == "Ganho" %}
+                            <td class="receita">{{ geral.type_input }}</td>
+                            {% else %}
+                            <td class="despesa">{{ geral.type_input }}</td>
+                            {% endif %}
+                            <td>{{ geral.created_at }}</td>
+                            <td>R$ {{ "%.2f"|format(geral.value) }}</td>
+                            <td>{{ geral.description }}</td>
                             <td>
-                                <button class="editar">Editar</button>
-                                <button class="excluir">Excluir</button>
+                                <form method="post" action="/acao_geral">
+                                    <input type="hidden" name="id" value="{{ geral.id }}" />
+                                    <button type="submit" name="action" value="editar" class="editar">Editar</button>
+                                    <button type="submit" name="action" value="excluir" class="excluir">Excluir</button>
+                                </form>
                             </td>
                         </tr>
-                        <tr>
-                            <td>2</td>
-                            <td class="despesa">Despesas</td>
-                            <td>07/07/2025</td>
-                            <td>R$ 241,46</td>
-                            <td>Compras do supermercado</td>
-                            <td>
-                                <button class="editar">Editar</button>
-                                <button class="excluir">Excluir</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td class="receita">Receita</td>
-                            <td>16/09/2025</td>
-                            <td>R$ 123,46</td>
-                            <td>Compras do supermercado</td>
-                            <td>
-                                <button class="editar">Editar</button>
-                                <button class="excluir">Excluir</button>
-                            </td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Adicionar Ganho ou Gasto</title>
+        <link rel="stylesheet" href="/frontend/static/form_finance.css" />
+        <script src="https://kit.fontawesome.com/dd069937d0.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="container">
+            <header class="app-header">
+                <h1>Adicione um Gasto ou Ganho</h1>
+            </header>
+            <div class="app-main">
+                <form class="app-form" method="post" action="/editar_geral/{{ geral.id }}">
+                    <div class="line_one">
+                        <div class="input-box">
+                            <label for="entrance_type">Selecione a Entrada</label>
+                            <select name="type_input" id="entrance_type">
+                                <option value="Ganho">Ganho</option>
+                                <option value="Gasto">Gasto</option>
+                            </select>
+                        </div>
+                        <div class="input-box">
+                            <label for="value">Selecione o valor</label>
+                            <input id="value" name="value" type="number" step="0.01" placeholder="Ex. 200.00" required />
+                        </div>
+                    </div>
+
+                    <div class="line_three">
+                        <div class="input-box">
+                            <label for="name">Nome</label>
+                            <input id="name" name="name" type="text" placeholder="Ex: Salário, Conta de Luz" required />
+                        </div>
+
+                        <div class="input-box">
+                            <label for="category">Selecione uma Categoria</label>
+                            <select name="category_id" required>
+                                {% for categoria in categorias %}
+                                <option value="{{ categoria.id }}">{{ categoria.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <a href="/category" class="new_category">Criar nova categoria</a>
+                        </div>
+                    </div>
+
+                    <div class="line_two">
+                        <div class="input-box">
+                            <label for="description">Coloque uma Descrição</label>
+                            <input class="description" id="description" name="description" type="text" placeholder="Alguma coisa" />
+                        </div>
+                    </div>
+
+                    <div class="line_four">
+                        <button class="enviar" type="submit">Enviar</button>
+                        <button onclick="window.location.href='/dashboard_geral'" class="cancelar" type="reset">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

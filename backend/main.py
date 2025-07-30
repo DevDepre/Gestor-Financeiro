@@ -54,6 +54,11 @@ async def mostrar_dashboard_expenses(request: Request, db: Session = Depends(get
     despesas = db.query(Financa).filter(Financa.type_input == "Gasto")
     return templates.TemplateResponse("dashboard_expenses.html", {"request": request, "despesas": despesas})
 
+@app.get("/dashboard_geral", response_class=HTMLResponse)
+async def mostrar_dashboard_geral(request: Request, db: Session = Depends(get_db)):
+    gerais = db.query(Financa)
+    return templates.TemplateResponse("dashboard_geral.html", {"request": request, "gerais": gerais})
+
 @app.get("/category", response_class=HTMLResponse)
 async def mostrar_formulario_categoria(request: Request):
     return templates.TemplateResponse("new_category.html", {"request": request})
@@ -63,7 +68,7 @@ async def editar_receita(request: Request, id: int, db: Session = Depends(get_db
     receita = db.query(Financa).filter(Financa.id == id, Financa.type_input == "Ganho").first()
 
     if not receita:
-        return HTMLResponse("Pagina nao encontrada", status_code= 404)
+        return templates.TemplateResponse("erro_404.html", {"request": request}, status_code= 404)
 
     categorias = db.query(Category).all()
     return templates.TemplateResponse("edit_form_finance_income.html", {"request": request, "receita": receita, "categorias":categorias}) 
@@ -73,10 +78,20 @@ async def editar_dispesa(request: Request, id: int, db: Session = Depends(get_db
     dispesa = db.query(Financa).filter(Financa.id == id, Financa.type_input == "Gasto").first()
 
     if not dispesa:
-        return HTMLResponse("Pagina nao encontrada", status_code= 404)
+        return templates.TemplateResponse("erro_404.html", {"request": request}, status_code= 404)
 
     categorias = db.query(Category).all()
     return templates.TemplateResponse("edit_form_finance_expenses.html", {"request": request, "dispesa": dispesa, "categorias":categorias}) 
+
+@app.get("/editar_geral/{id}", response_class=HTMLResponse)
+async def editar_geral(request: Request, id: int, db: Session = Depends(get_db)):
+    geral = db.query(Financa).filter(Financa.id == id).first()
+
+    if not geral:
+        return templates.TemplateResponse("erro_404.html", {"request": request}, status_code=404)
+
+    categorias = db.query(Category).all()
+    return templates.TemplateResponse("/edit_form_finance_geral.html", {"request": request, "geral": geral, "categorias": categorias})
 
 @app.post("/form", response_model=FinancaSchema)
 async def enviar_formulario(
@@ -123,6 +138,7 @@ async def tratar_acao_dispensa(
 ):
     if action == "excluir":
         dispensa = db.query(Financa).filter(Financa.id == id, Financa.type_input == "Gasto").first()
+
         if dispensa:
             db.delete(dispensa)
             db.commit()
@@ -131,8 +147,23 @@ async def tratar_acao_dispensa(
     elif action == "editar":
         return RedirectResponse(url=f"/editar_dispesa/{id}", status_code= 303)
 
+@app.post("/acao_geral")
+async def tratar_acao_geral(id: int = Form(...), action: str = Form(...), db: Session = Depends(get_db)):
+
+    if action == "excluir":
+        gerais = db.query(Financa).filter(Financa.id == id).first()
+
+        if gerais:
+            db.delete(gerais)
+            db.commit()
+        return RedirectResponse(url="/dashboard_geral", status_code= 303)
+
+    elif action == "editar":
+        return RedirectResponse(url=f"/editar_geral/{id}", status_code= 303)
+
 @app.post("/editar_receita/{id}")
 async def salvar_edicao_receita(
+    request: Request,
     id: int,
     name: str = Form(...),
     value: float = Form(...),
@@ -145,7 +176,7 @@ async def salvar_edicao_receita(
     receita = db.query(Financa).filter(Financa.id == id, Financa.type_input == "Ganho").first()
 
     if not receita:
-        return HTMLResponse("Pagina não encontrada", status_code=404)
+        return templates.TemplateResponse("erro_404.html", {"request": request}, status_code=404)
 
     receita.name = name
     receita.value = value
@@ -159,6 +190,7 @@ async def salvar_edicao_receita(
 
 @app.post("/editar_dispesa/{id}")
 async def salvar_edicao_dispesa(
+    request: Request,
     id: int,
     name: str = Form(...),
     value: float = Form(...),
@@ -171,7 +203,7 @@ async def salvar_edicao_dispesa(
     dispesa = db.query(Financa).filter(Financa.id == id, Financa.type_input == "Gasto").first()
 
     if not dispesa:
-        return HTMLResponse("Pagina não encontrada", status_code=404)
+        return templates.TemplateResponse("erro_404.html", {"request": request}, status_code=404)
 
     dispesa.name = name
     dispesa.value = value
@@ -183,6 +215,34 @@ async def salvar_edicao_dispesa(
 
     return RedirectResponse(url="/dashboard_expenses", status_code=303)
 
+@app.post("/editar_geral/{id}")
+async def salvar_edicao_geral(
+    request: Request,
+    id: int,
+    name: str = Form(...),
+    value: str = Form(...),
+    type_input: str = Form(...),
+    description: str = Form(...),
+    category_id: str = Form(...),
+    db: Session = Depends(get_db)
+):
+
+    geral = db.query(Financa).filter(Financa.id == id).first()
+
+    if not geral:
+        return templates.TemplateResponse("erro_404.html", {"request": request}, status_code=404)
+
+
+    geral.name = name
+    geral.value = value
+    geral.description = description
+    geral.type_input = type_input
+    geral.category_id = category_id
+    
+    db.commit()
+
+    return RedirectResponse("/dashboard_geral", status_code= 303)
+    
 @app.post("/category", response_model=CategorySchema)
 async def criar_categoria(
     name: str = Form(...),
