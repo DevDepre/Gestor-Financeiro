@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Cascadia+Code:ital,wght@0,200..700;1,200..700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap");
+
+body {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-main {
+    width: 1400px;
+    height: 760px;
+    max-width: 1600px;
+    max-height: 800px;
+    min-width: 1000px;
+    min-height: 500px;
+    margin-top: 80px;
+    box-shadow: 15px 15px 0 #212529;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+.app-main img {
+    width: 800px;
+    height: 800px;
+}

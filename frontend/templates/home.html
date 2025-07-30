@@ -25,7 +25,11 @@
             <main class="main-panel">
                 <div class="valor-atual">
                     <h2>Valor Atual</h2>
+                    {% if saldo_atual >= 0 %}
                     <p class="valor verde">R$ {{ "%.2f"|format(saldo_atual) }}</p>
+                    {% else %}
+                    <p class="valor vermelho">R$ {{ "%.2f"|format(saldo_atual) }}</p>
+                    {% endif %}
                 </div>
 
                 <div class="valores-secundarios">

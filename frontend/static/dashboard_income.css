@@ -33,6 +33,10 @@ body {
     text-decoration: none;
 }
 
+.filtros .a-receitas {
+    background-color: #4ed824;
+}
+
 .filtros .ativo {
     background-color: #4caf50;
     color: white;
