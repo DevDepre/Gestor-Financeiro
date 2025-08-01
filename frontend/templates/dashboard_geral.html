@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Painel Analítico</title>
         <link rel="stylesheet" href="/frontend/static/dashboard_geral.css" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
         <div class="container">
@@ -19,17 +20,19 @@
                 <div class="grafico-barra">
                     <canvas id="graficoBarras"></canvas>
                 </div>
+
+                <input type="hidden" id="receitaTotal" value="{{ '%.2f'|format(total_receitas)|replace(',', '.') }}" />
+                <input type="hidden" id="despesaTotal" value="{{ '%.2f'|format(total_despesas)|replace(',', '.') }}" />
+
                 <div class="grafico-pizza">
                     <canvas id="graficoPizza"></canvas>
-                    <div class="legenda">
-                        <span><span class="quadrado verde"></span>Receitas</span>
-                        <span><span class="quadrado vermelho"></span>Despesas</span>
-                    </div>
                 </div>
             </div>
 
             <div class="resumo">
-                <div class="grafico-mini"></div>
+                <div class="grafico-mini">
+                    <canvas id="graficoTotal"></canvas>
+                </div>
                 <div class="dados-texto">
                     <p>Ganhos:</p>
                     <p>Gastos:</p>
@@ -80,5 +83,8 @@
                 </table>
             </div>
         </div>
+        <script src="/frontend/script/graphics_bar_geral.js"></script>
+        <script src="/frontend/script/graphics_pizza_geral.js"></script>
+        <script src="/frontend/script/graphics_total_geral.js"></script>
     </body>
 </html>

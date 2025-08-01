@@ -57,7 +57,13 @@ async def mostrar_dashboard_expenses(request: Request, db: Session = Depends(get
 @app.get("/dashboard_geral", response_class=HTMLResponse)
 async def mostrar_dashboard_geral(request: Request, db: Session = Depends(get_db)):
     gerais = db.query(Financa)
-    return templates.TemplateResponse("dashboard_geral.html", {"request": request, "gerais": gerais})
+    receitas = db.query(Financa).filter(Financa.type_input == "Ganho").all()
+    despesas = db.query(Financa).filter(Financa.type_input == "Gasto").all()
+
+    total_receitas = sum([g.value for g in receitas])
+    total_despesas = sum([g.value for g in despesas])
+
+    return templates.TemplateResponse("dashboard_geral.html", {"request": request, "gerais": gerais, "total_receitas":total_receitas, "total_despesas":total_despesas})
 
 @app.get("/category", response_class=HTMLResponse)
 async def mostrar_formulario_categoria(request: Request):

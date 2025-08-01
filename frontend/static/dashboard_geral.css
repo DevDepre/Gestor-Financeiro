@@ -53,7 +53,6 @@
     height: 300px;
 }
 
-.grafico-barra,
 .grafico-pizza {
     width: 400px;
     height: 100%;
@@ -61,6 +60,37 @@
     box-shadow: 10px 10px 0 #212529;
     padding: 10px;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grafico-barra {
+    width: 800px;
+    height: 100%;
+    background-color: white;
+    box-shadow: 10px 10px 0 #212529;
+    padding: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grafico-mini {
+    width: 400px;
+    height: 100%;
+    background-color: white;
+    box-shadow: 10px 10px 0 #212529;
+    padding: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.graficos .grafico-barra #graficoBarras {
+    height: 300px;
 }
 
 .legenda {
