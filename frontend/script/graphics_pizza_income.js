@@ -1,18 +1,17 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const ctx = document.getElementById("graficoPizza").getContext("2d");
+    const ctx = document.getElementById("graficoPizzaReceita").getContext("2d");
 
     const receita = parseFloat(document.getElementById("receitaTotal").value);
-    const despesa = parseFloat(document.getElementById("despesaTotal").value);
 
     new Chart(ctx, {
         type: "doughnut",
         data: {
-            labels: ["Receita", "Despesa"],
+            labels: ["Receita"],
             datasets: [
                 {
                     label: "Distribuição",
-                    data: [receita, despesa],
-                    backgroundColor: ["#ACE1AF", "#F05945"], // verde e vermelho
+                    data: [receita],
+                    backgroundColor: ["#ACE1AF"],
                     borderWidth: 1,
                 },
             ],
@@ -23,9 +22,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 legend: {
                     display: true,
                     position: "top",
-                },
-                title: {
-                    display: true,
                 },
             },
         },

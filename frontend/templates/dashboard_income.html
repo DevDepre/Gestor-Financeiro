@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Painel Receita</title>
         <link rel="stylesheet" href="/frontend/static/dashboard_income.css" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
         <div class="container receita-ativa">
@@ -19,18 +20,18 @@
                 <div class="grafico-barra">
                     <canvas id="graficoBarrasReceita"></canvas>
                 </div>
+
+                <input type="hidden" id="receitaTotal" value="{{ '%.2f'|format(total_receitas)|replace(',', '.') }}" />
+
                 <div class="grafico-pizza">
                     <canvas id="graficoPizzaReceita"></canvas>
-                    <div class="legenda">
-                        <span><span class="quadrado verde"></span>Receitas</span>
-                    </div>
                 </div>
             </div>
 
             <div class="navegacao-mes">
-                <button>&larr;</button>
-                <span>Junho</span>
-                <button>&rarr;</button>
+                <button id="mesAnterior" {% if mes_atual == 1 %}disabled{% endif %}>&larr;</button>
+                <span id="mesAtual" data-mes="{{ mes_atual }}">{{ nomes_mes }}</span>
+                <button id="mesPosterior" {% if mes_atual == 12 %}disabled{% endif %}>&rarr;</button>
             </div>
 
             <div class="tabela">
@@ -70,5 +71,8 @@
                 <button>&rarr;</button>
             </div>
         </div>
+        <script src="/frontend/script/graphics_bar_income.js"></script>
+        <script src="/frontend/script/graphics_pizza_income.js"></script>
+        <script src="/frontend/script/navigation_income.js"></script>
     </body>
 </html>

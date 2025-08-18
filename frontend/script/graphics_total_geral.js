@@ -12,17 +12,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 {
                     label: "Ganhos",
                     data: [receita],
-                    backgroundColor: "#d4edda",
+                    backgroundColor: "#ACE1AF",
                     borderWidth: 1,
-                    borderRadius: 10,
                     borderSkipped: false,
                 },
                 {
                     label: "Gastos",
                     data: [despesa],
-                    backgroundColor: "#f8d7da",
+                    backgroundColor: "#F05945",
                     borderWidth: 1,
-                    borderRadius: 10,
                     borderSkipped: false,
                 },
             ],
@@ -33,7 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 legend: { display: true },
                 title: {
                     display: true,
-                    text: "Comparação entre Ganhos e Gastos",
                 },
             },
             scales: {

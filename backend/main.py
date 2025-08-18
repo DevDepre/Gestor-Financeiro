@@ -1,9 +1,11 @@
 from fastapi import FastAPI, Form, Request, Depends
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
+from sqlalchemy import extract, func
 from typing import List
+from datetime import datetime
 
 from backend.models import Financa, Category
 from backend.database import criar_tabelas, SessionLocal
@@ -45,25 +47,119 @@ async def mostrar_formulario(request: Request, db: Session = Depends(get_db)):
     })
 
 @app.get("/dashboard_income", response_class=HTMLResponse)
-async def mostrar_dashboard_income(request: Request, db: Session = Depends(get_db)):
-    receitas = db.query(Financa).filter(Financa.type_input == "Ganho").all()
-    return templates.TemplateResponse("dashboard_income.html", {"request": request, "receitas": receitas})
+async def mostrar_dashboard_income(request: Request, mes: int = None, db: Session = Depends(get_db)):
+
+    if mes is None:
+        mes = datetime.now().month
+
+    receitas = db.query(Financa).filter(Financa.type_input == "Ganho").filter(extract("month", Financa.created_at) == mes).all()
+    total_receitas = sum([g.value for g in receitas])
+
+    nomes_meses = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ]
+
+    return templates.TemplateResponse("dashboard_income.html", {"request": request, "receitas": receitas,
+    "total_receitas": total_receitas, "nomes_mes":nomes_meses[mes - 1], "mes_atual": mes})
 
 @app.get("/dashboard_expenses", response_class=HTMLResponse)
-async def mostrar_dashboard_expenses(request: Request, db: Session = Depends(get_db)):
-    despesas = db.query(Financa).filter(Financa.type_input == "Gasto")
-    return templates.TemplateResponse("dashboard_expenses.html", {"request": request, "despesas": despesas})
+async def mostrar_dashboard_expenses(request: Request, mes: int = None, db: Session = Depends(get_db)):
+
+    if mes is None:
+        mes = datetime.now().month
+
+    despesas = db.query(Financa).filter(Financa.type_input == "Gasto").filter(extract("month", Financa.created_at) == mes).all()
+    total_despesas = sum([g.value for g in despesas])
+
+    nomes_meses = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ]
+
+    return templates.TemplateResponse("dashboard_expenses.html", {"request": request, "despesas": despesas,
+    "total_despesas":total_despesas, "nomes_mes":nomes_meses[mes - 1], "mes_atual": mes})
 
 @app.get("/dashboard_geral", response_class=HTMLResponse)
-async def mostrar_dashboard_geral(request: Request, db: Session = Depends(get_db)):
-    gerais = db.query(Financa)
+async def mostrar_dashboard_geral(request: Request, mes: int = None, db: Session = Depends(get_db)):
+
+    if mes is None:
+        mes = datetime.now().month
+
+    gerais = db.query(Financa).filter(extract("month", Financa.created_at) == mes).all()
     receitas = db.query(Financa).filter(Financa.type_input == "Ganho").all()
     despesas = db.query(Financa).filter(Financa.type_input == "Gasto").all()
 
     total_receitas = sum([g.value for g in receitas])
     total_despesas = sum([g.value for g in despesas])
+    media = (total_receitas + total_despesas) / 2
 
-    return templates.TemplateResponse("dashboard_geral.html", {"request": request, "gerais": gerais, "total_receitas":total_receitas, "total_despesas":total_despesas})
+    nomes_meses = [
+        "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    ]
+
+    return templates.TemplateResponse("dashboard_geral.html", {"request": request, "gerais": gerais, "total_receitas":total_receitas, 
+    "total_despesas":total_despesas, "media": media, "nomes_mes":nomes_meses[mes - 1], "mes_atual": mes})
+
+@app.get("/api/graficos_income/mensal")
+async def dados_grafico_income_mensal(db: Session = Depends(get_db)):
+    ganhos = (
+        db.query(
+            extract("month", Financa.created_at).label("mes"),
+            func.sum(Financa.value).label("total")
+        )
+        .filter(Financa.type_input == "Ganho")
+        .group_by("mes")
+        .order_by("mes")
+        .all()
+    )
+
+    return JSONResponse({"ganhos": [{"mes": int(g.mes), "total": float(g.total)} for g in ganhos]})
+
+@app.get("/api/graficos_expenses/mensal")
+async def dados_grafico_expenses_mensal(db:Session = Depends(get_db)):
+    gastos = (
+        db.query(
+            extract("month", Financa.created_at).label("mes"),
+            func.sum(Financa.value).label("total")
+        )
+        .filter(Financa.type_input == "Gasto")
+        .group_by("mes")
+        .order_by("mes")
+        .all()
+    )
+
+    return JSONResponse({"gastos": [{"mes": int(g.mes), "total": float(g.total)} for g in gastos]})
+
+@app.get("/api/graficos_geral/mensal")
+async def dados_grafico_geral_mensal(db: Session = Depends(get_db)):
+    ganhos = (
+        db.query(
+            extract("month", Financa.created_at).label("mes"),
+            func.sum(Financa.value).label("total")
+        )
+        .filter(Financa.type_input == "Ganho")
+        .group_by("mes")
+        .order_by("mes")
+        .all()
+    )
+
+    gastos = (
+        db.query(
+            extract("month", Financa.created_at).label("mes"),
+            func.sum(Financa.value).label("total")
+        )
+        .filter(Financa.type_input == "Gasto")
+        .group_by("mes")
+        .order_by("mes")
+        .all()
+    )
+
+    return JSONResponse({
+        "ganhos": [{"mes": int(g.mes), "total": float(g.total)} for g in ganhos],
+        "gastos": [{"mes": int(g.mes), "total": float(g.total)} for g in gastos]
+    })
 
 @app.get("/category", response_class=HTMLResponse)
 async def mostrar_formulario_categoria(request: Request):

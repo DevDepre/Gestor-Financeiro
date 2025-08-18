@@ -8,7 +8,7 @@ body {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1500px;
     margin: auto;
     background: white;
     padding: 20px;
@@ -47,13 +47,26 @@ body {
     height: 300px;
 }
 
-.grafico-barra,
 .grafico-pizza {
     width: 400px;
     height: 100%;
     background-color: white;
     box-shadow: 10px 10px 0 #b71c1c;
     padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.grafico-barra {
+    width: 700px;
+    height: 100%;
+    background-color: white;
+    box-shadow: 10px 10px 0 #b71c1c;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .legenda {

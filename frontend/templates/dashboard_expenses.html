@@ -20,18 +20,18 @@
                 <div class="grafico-barra">
                     <canvas id="graficoBarrasDespesas"></canvas>
                 </div>
+
+                <input type="hidden" id="despesaTotal" value="{{ '%.2f'|format(total_despesas)|replace(',', '.') }}" />
+
                 <div class="grafico-pizza">
                     <canvas id="graficoPizzaDespesas"></canvas>
-                    <div class="legenda">
-                        <span><span class="quadrado vermelho"></span>Despesas</span>
-                    </div>
                 </div>
             </div>
 
             <div class="navegacao-mes">
-                <button>&larr;</button>
-                <span>Junho</span>
-                <button>&rarr;</button>
+                <button id="mesAnterior" {% if mes_atual == 1 %}disabled{% endif %}>&larr;</button>
+                <span id="mesAtual" data-mes="{{ mes_atual }}">{{ nomes_mes }}</span>
+                <button id="mesPosterior" {% if mes_atual == 12 %}disabled{% endif %}>&rarr;</button>
             </div>
 
             <div class="tabela">
@@ -71,5 +71,8 @@
                 <button>&rarr;</button>
             </div>
         </div>
+        <script src="/frontend/script/graphics_bar_expenses.js"></script>
+        <script src="/frontend/script/graphics_pizza_expenses.js"></script>
+        <script src="/frontend/script/navigation_expenses.js"></script>
     </body>
 </html>

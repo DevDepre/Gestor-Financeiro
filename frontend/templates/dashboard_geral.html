@@ -18,7 +18,7 @@
 
             <div class="graficos">
                 <div class="grafico-barra">
-                    <canvas id="graficoBarras"></canvas>
+                    <canvas class="canva-grafico-barra" id="graficoBarras"></canvas>
                 </div>
 
                 <input type="hidden" id="receitaTotal" value="{{ '%.2f'|format(total_receitas)|replace(',', '.') }}" />
@@ -34,16 +34,16 @@
                     <canvas id="graficoTotal"></canvas>
                 </div>
                 <div class="dados-texto">
-                    <p>Ganhos:</p>
-                    <p>Gastos:</p>
-                    <p>Média:</p>
+                    <p>Ganhos: {{ "%.2f"|format(total_receitas) }}</p>
+                    <p>Gastos: {{ "%.2f"|format(total_despesas) }}</p>
+                    <p>Média: {{ "%.2f"|format(media) }}</p>
                 </div>
             </div>
 
             <div class="navegacao-mes">
-                <button>&larr;</button>
-                <span>Junho</span>
-                <button>&rarr;</button>
+                <button id="mesAnterior" {% if mes_atual == 1 %}disabled{% endif %}>&larr;</button>
+                <span id="mesAtual" data-mes="{{ mes_atual }}">{{ nomes_mes }}</span>
+                <button id="mesPosterior" {% if mes_atual == 12 %}disabled{% endif %}>&rarr;</button>
             </div>
 
             <div class="tabela">
@@ -86,5 +86,6 @@
         <script src="/frontend/script/graphics_bar_geral.js"></script>
         <script src="/frontend/script/graphics_pizza_geral.js"></script>
         <script src="/frontend/script/graphics_total_geral.js"></script>
+        <script src="/frontend/script/navigation.js"></script>
     </body>
 </html>

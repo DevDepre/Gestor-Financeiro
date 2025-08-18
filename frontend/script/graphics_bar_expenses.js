@@ -1,17 +1,12 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    const ctx = document.getElementById("graficoBarras").getContext("2d");
+    const ctx = document.getElementById("graficoBarrasDespesas").getContext("2d");
 
-    const response = await fetch("/api/graficos_geral/mensal");
+    const response = await fetch("/api/graficos_expenses/mensal");
     const data = await response.json();
 
     const mesesNomes = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-    const ganhosPorMes = new Array(12).fill(0);
     const gastosPorMes = new Array(12).fill(0);
-
-    data.ganhos.forEach((item) => {
-        ganhosPorMes[item.mes - 1] = item.total;
-    });
 
     data.gastos.forEach((item) => {
         gastosPorMes[item.mes - 1] = item.total;
@@ -22,11 +17,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         data: {
             labels: mesesNomes,
             datasets: [
-                {
-                    label: "Ganhos",
-                    backgroundColor: "#ACE1AF",
-                    data: ganhosPorMes,
-                },
                 {
                     label: "Gastos",
                     backgroundColor: "#F05945",
@@ -39,9 +29,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             plugins: {
                 legend: {
                     position: "top",
-                },
-                title: {
-                    display: true,
                 },
             },
         },

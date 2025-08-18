@@ -66,7 +66,7 @@
 }
 
 .grafico-barra {
-    width: 800px;
+    width: 1000px;
     height: 100%;
     background-color: white;
     box-shadow: 10px 10px 0 #212529;
@@ -77,9 +77,23 @@
     align-items: center;
 }
 
-.grafico-mini {
+.canva-grafico-barra {
+    width: 1000px;
+    height: 300px;
+}
+
+.dados-texto {
+    width: 220px;
+    height: 110px;
+    background-color: white;
+    box-shadow: 10px 10px 0 #212529;
+    padding: 10px;
+    position: relative;
+}
+
+.resumo .grafico-mini {
     width: 400px;
-    height: 100%;
+    height: 320px;
     background-color: white;
     box-shadow: 10px 10px 0 #212529;
     padding: 10px;
@@ -87,6 +101,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 100px;
 }
 
 .graficos .grafico-barra #graficoBarras {
@@ -117,15 +132,8 @@
 .resumo {
     display: flex;
     margin-top: 40px;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
-}
-
-.grafico-mini {
-    width: 200px;
-    height: 100px;
-    background-color: white;
-    box-shadow: 5px 5px 0 #212529;
 }
 
 .dados-texto p {
