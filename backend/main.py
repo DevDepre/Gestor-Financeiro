@@ -8,7 +8,7 @@ from typing import List
 from datetime import datetime
 
 from backend.models import Financa, Category
-from backend.database import criar_tabelas, SessionLocal
+from backend.database import criar_tabelas, get_db, SessionLocal
 from backend.schemas import FinancaSchema, CategorySchema
 
 app = FastAPI()
@@ -19,13 +19,6 @@ app.mount("/frontend/static", StaticFiles(directory="frontend/static"), name="st
 app.mount("/frontend/script", StaticFiles(directory="frontend/script"), name="script")
 
 templates = Jinja2Templates(directory="frontend/templates")
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request, db: Session = Depends(get_db)):
@@ -47,60 +40,90 @@ async def mostrar_formulario(request: Request, db: Session = Depends(get_db)):
     })
 
 @app.get("/dashboard_income", response_class=HTMLResponse)
-async def mostrar_dashboard_income(request: Request, mes: int = None, db: Session = Depends(get_db)):
+async def mostrar_dashboard_income(request: Request, mes: int = None, page: int = 1, per_page: int = 10, db: Session = Depends(get_db)):
 
     if mes is None:
         mes = datetime.now().month
 
-    receitas = db.query(Financa).filter(Financa.type_input == "Ganho").filter(extract("month", Financa.created_at) == mes).all()
-    total_receitas = sum([g.value for g in receitas])
+    total_registros = db.query(Financa).filter(Financa.type_input == "Ganho").filter(extract("month", Financa.created_at) == mes).count()
+    skip = (page - 1) * per_page
+    categorias = db.query(Category).all()
+    categorias_data = ( db.query(Category.name, func.sum(Financa.value))
+        .join(Financa, Financa.category_id == Category.id)
+        .filter(Financa.type_input == "Ganho", extract("month", Financa.created_at) == mes)
+        .group_by(Category.name)
+        .all()
+    )
+    categorias_labels = [c[0] for c in categorias_data]
+    categorias_values = [float(c[1]) for c in categorias_data]  
+    gerais = db.query(Financa).filter(Financa.type_input == "Ganho").filter(extract("month", Financa.created_at) == mes).offset(skip).limit(per_page).all()
+    total_receitas = sum(categorias_values)
+    total_pages = (total_registros + per_page - 1) // per_page
 
     nomes_meses = [
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ]
 
-    return templates.TemplateResponse("dashboard_income.html", {"request": request, "receitas": receitas,
-    "total_receitas": total_receitas, "nomes_mes":nomes_meses[mes - 1], "mes_atual": mes})
+    return templates.TemplateResponse("dashboard_income.html", {"request": request, "receitas": gerais, "categorias": categorias,
+    "total_receitas": total_receitas, "nomes_mes":nomes_meses[mes - 1], "mes_atual": mes, "page": page,
+    "total_pages": total_pages, "categorias_data":categorias_data, "categorias_labels": categorias_labels, "categorias_values": categorias_values,})
 
 @app.get("/dashboard_expenses", response_class=HTMLResponse)
-async def mostrar_dashboard_expenses(request: Request, mes: int = None, db: Session = Depends(get_db)):
+async def mostrar_dashboard_expenses(request: Request, mes: int = None, page: int = 1, per_page: int = 10, db: Session = Depends(get_db)):
 
     if mes is None:
         mes = datetime.now().month
 
-    despesas = db.query(Financa).filter(Financa.type_input == "Gasto").filter(extract("month", Financa.created_at) == mes).all()
-    total_despesas = sum([g.value for g in despesas])
+    total_registros = db.query(Financa).filter(Financa.type_input == "Gasto").filter(extract("month", Financa.created_at) == mes).count()
+    skip = (page - 1) * per_page
+    categorias = db.query(Category).all()
+    categorias_data = ( db.query(Category.name, func.sum(Financa.value))
+        .join(Financa, Financa.category_id == Category.id)
+        .filter(Financa.type_input == "Gasto", extract("month", Financa.created_at) == mes)
+        .group_by(Category.name)
+        .all()
+    )
+    categorias_labels = [c[0] for c in categorias_data]
+    categorias_values = [float(c[1]) for c in categorias_data] 
+    gerais = db.query(Financa).filter(Financa.type_input == "Gasto").filter(extract("month", Financa.created_at) == mes).offset(skip).limit(per_page).all()
+    total_despesas = sum(categorias_values)
+    total_pages = (total_registros + per_page - 1) // per_page
 
     nomes_meses = [
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ]
 
-    return templates.TemplateResponse("dashboard_expenses.html", {"request": request, "despesas": despesas,
-    "total_despesas":total_despesas, "nomes_mes":nomes_meses[mes - 1], "mes_atual": mes})
+    return templates.TemplateResponse("dashboard_expenses.html", {"request": request, "despesas": gerais, "categorias":categorias, "categorias_data":categorias_data,
+    "total_despesas":total_despesas, "nomes_mes":nomes_meses[mes - 1], "mes_atual": mes, "page": page, "total_pages": total_pages, "categorias_labels":categorias_labels,
+    "categorias_values":categorias_values})
 
 @app.get("/dashboard_geral", response_class=HTMLResponse)
-async def mostrar_dashboard_geral(request: Request, mes: int = None, db: Session = Depends(get_db)):
+async def mostrar_dashboard_geral(request: Request, mes: int = None, page: int = 1, per_page: int = 10, db: Session = Depends(get_db)):
 
     if mes is None:
         mes = datetime.now().month
 
-    gerais = db.query(Financa).filter(extract("month", Financa.created_at) == mes).all()
+    total_registros = db.query(Financa).filter(extract("month", Financa.created_at) == mes).count()
+    skip = (page - 1) * per_page
+    gerais = db.query(Financa).filter(extract("month", Financa.created_at) == mes).offset(skip).limit(per_page).all()
+    categorias = db.query(Category).all()
     receitas = db.query(Financa).filter(Financa.type_input == "Ganho").all()
     despesas = db.query(Financa).filter(Financa.type_input == "Gasto").all()
-
     total_receitas = sum([g.value for g in receitas])
     total_despesas = sum([g.value for g in despesas])
     media = (total_receitas + total_despesas) / 2
+    total_pages = (total_registros + per_page - 1) // per_page
 
     nomes_meses = [
         "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
         "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
     ]
 
-    return templates.TemplateResponse("dashboard_geral.html", {"request": request, "gerais": gerais, "total_receitas":total_receitas, 
-    "total_despesas":total_despesas, "media": media, "nomes_mes":nomes_meses[mes - 1], "mes_atual": mes})
+    return templates.TemplateResponse("dashboard_geral.html", {"request": request, "gerais": gerais, "categorias":categorias, "total_receitas":total_receitas, 
+    "total_despesas":total_despesas, "media": media, "nomes_mes":nomes_meses[mes - 1], "mes_atual": mes, "page": page,
+    "total_pages": total_pages})
 
 @app.get("/api/graficos_income/mensal")
 async def dados_grafico_income_mensal(db: Session = Depends(get_db)):

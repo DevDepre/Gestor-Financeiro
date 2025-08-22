@@ -7,7 +7,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const mesesNomes = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
     const ganhosPorMes = new Array(12).fill(0);
-    // const gastosPorMes = new Array(12).fill(0);
 
     data.ganhos.forEach((item) => {
         ganhosPorMes[item.mes - 1] = item.total;

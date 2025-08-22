@@ -25,6 +25,10 @@
 
                 <div class="grafico-pizza">
                     <canvas id="graficoPizzaReceita"></canvas>
+
+                    <input type="hidden" id="categoriasLabels" value='{{ categorias_labels | tojson }}'>
+                    <input type="hidden" id="categoriasValues" value='{{ categorias_values | tojson }}'>
+                    
                 </div>
             </div>
 
@@ -41,6 +45,7 @@
                             <th>Nome</th>
                             <th>Data</th>
                             <th>Valor</th>
+                            <th>Categoria</th>
                             <th>Descrição</th>
                             <th>Ações</th>
                         </tr>
@@ -51,6 +56,13 @@
                             <td>{{ receita.name }}</td>
                             <td>{{ receita.created_at }}</td>
                             <td>R$ {{ "%.2f"|format(receita.value) }}</td>
+                            <td>
+                                {% for categoria in categorias %}
+                                    {% if categoria.id == receita.category_id %}
+                                        {{ categoria.name }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
                             <td>{{ receita.description }}</td>
                             <td>
                                 <form method="post" action="/acao_receita">
@@ -66,9 +78,19 @@
             </div>
 
             <div class="paginacao">
-                <button>&larr;</button>
-                <span>1</span>
-                <button>&rarr;</button>
+                {% if page > 1 %}
+                    <a href="?page={{ page - 1 }}&per_page=10&mes={{ mes_atual }}">
+                        <button>&larr;</button>
+                    </a>
+                {% endif %}
+
+                <span>{{ page }} de {{ total_pages }}</span>
+
+                {% if page < total_pages %}
+                    <a href="?page={{ page + 1 }}&per_page=10&mes={{ mes_atual }}">
+                        <button>&rarr;</button>
+                    </a>
+                {% endif %}
             </div>
         </div>
         <script src="/frontend/script/graphics_bar_income.js"></script>
