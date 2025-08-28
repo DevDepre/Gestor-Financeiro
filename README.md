@@ -33,7 +33,7 @@ Clone the repository and install the dependencies:
 
 ```bash
 git clone https://github.com/DevDepre/Gestor-Financeiro.git
-cd <Gestor-Financeiro>
+cd Gestor-Financeiro
 pip install -r requirements.txt
 ```
 
