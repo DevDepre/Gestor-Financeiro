@@ -4,10 +4,10 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 Base = declarative_base()
 
 USER = "root"
-PASSWORD = "nycolas"
+PASSWORD = "" # Sua senha do banco de dados
 HOST = "localhost"
 PORT = "3306"
-DB_NAME = "Financas"
+DB_NAME = "" # Nome do seu banco de dados
 
 DATABASE_URL = f"mysql+pymysql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DB_NAME}"
 
